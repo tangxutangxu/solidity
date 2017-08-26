@@ -95,10 +95,7 @@ contract MidIncentive {
      */
 
     function MidIncentive(address _owner, uint _startBlock, address _LRC) {
-        if (_startBlock <= block.number) {
-            // Must specify a block in the future.
-            throw;
-        }
+        assert(_startBlock <= block.number);
         startBlock = _startBlock;
         owner = _owner;
         LRC = LoopringToken(_LRC);
@@ -152,17 +149,14 @@ contract MidIncentive {
       Withdraw(attendee, ethAmount, lrcAmount);
     }
 
-
     /*
      * INTERNAL FUNCTIONS
      */
 
-    // 存款检查
     function checkDeposit(uint ethAmount) internal constant returns (bool) {
-        return totalEth + ethAmount <= MAX_AMOUNT;
+        return totalEth + ethAmount <= MAX_AMOUNT && totalEth + ethAmount > totalEth;
     }
 
-    // 取款检查
     function checkWithdraw(address attendee, uint ethAmount) internal constant returns (bool) {
         return balances[attendee] - ethAmount >= 0 && balances[attendee] - ethAmount < balances[attendee];
     }
